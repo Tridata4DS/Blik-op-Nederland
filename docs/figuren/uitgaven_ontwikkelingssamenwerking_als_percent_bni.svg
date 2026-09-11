@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='172.80pt' height='61.20pt' viewBox='0 0 172.80 61.20'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: none;'/>
+<defs>
+  <clipPath id='cpMC4wMHwxNzIuODB8MC4wMHw2MS4yMA=='>
+    <rect x='0.00' y='0.00' width='172.80' height='61.20' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHwxNzIuODB8MC4wMHw2MS4yMA==)'>
+<rect x='0.00' y='0.00' width='172.80' height='61.20' style='stroke-width: 0.00; stroke: none;' />
+</g>
+<defs>
+  <clipPath id='cpMS45OXwxNzAuODF8MS45OXw1OS4yMQ=='>
+    <rect x='1.99' y='1.99' width='168.81' height='57.21' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMS45OXwxNzAuODF8MS45OXw1OS4yMQ==)'>
+<polyline points='9.67,36.38 25.01,56.61 40.36,13.26 55.71,16.15 71.05,27.71 86.40,50.83 ' style='stroke-width: 1.49; stroke: #C99A2E; stroke-linecap: butt;' />
+<circle cx='86.40' cy='50.83' r='2.06' style='stroke-width: 0.71; stroke: #C99A2E; fill: #C99A2E;' />
+<line x1='1.99' y1='4.59' x2='170.81' y2='4.59' style='stroke-width: 1.07; stroke: #8A9199; stroke-dasharray: 2.85,2.85; stroke-linecap: butt;' />
+<polyline points='86.40,32.66 163.13,31.01 ' style='stroke-width: 1.07; stroke: #C99A2E; stroke-opacity: 0.80; stroke-dasharray: 1.42,1.42; stroke-linecap: butt;' />
+</g>
+<g clip-path='url(#cpMC4wMHwxNzIuODB8MC4wMHw2MS4yMA==)'>
+</g>
+</g>
+</svg>

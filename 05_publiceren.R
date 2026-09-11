@@ -240,9 +240,9 @@ publiceer <- function(melding = "Dashboard bijgewerkt",
     }
   }
 
-  dashboard <- file.path(projectmap, "docs", "dashboard.html")
+  dashboard <- file.path(projectmap, "docs", "index.html")
   if (!file.exists(dashboard)) {
-    stop("docs/dashboard.html bestaat niet. Draai eerst run_all.R.")
+    stop("docs/index.html bestaat niet. Draai eerst run_all.R.")
   }
 
   leeftijd <- as.numeric(difftime(Sys.time(), file.mtime(dashboard),

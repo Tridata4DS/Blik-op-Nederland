@@ -63,7 +63,7 @@ met_lijn <- function(d) {
   n <- dplyr::count(d, indicator, name = "n_")
   dplyr::semi_join(d, dplyr::filter(n, n_ >= 2), by = "indicator")
 }
-nl <- function(x, d = 1) format(round(x, d), big.mark = ".", decimal.mark = ",")
+nl <- function(x, d = 1) formatC(x, format = "f", digits = d, big.mark = ".", decimal.mark = ",")
 ```
 
 ## Leeswijzer
