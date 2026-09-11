@@ -1,0 +1,195 @@
+/*-- scss:defaults --*/
+
+// Palet — inkt op papier, kleur alleen waar die betekenis draagt
+$inkt:        #12263A;
+$papier:      #FAF9F6;
+$lijn:        #E5E3DE;
+$grijs:       #5B666F;
+$zacht:       #8A9199;
+
+$goed:        #1B6B5A;
+$koers:       #3E8E7E;
+$traag:       #C99A2E;
+$mis:         #A3352B;
+
+$body-bg:     $papier;
+$body-color:  $inkt;
+$link-color:  $inkt;
+
+$font-family-sans-serif: "Public Sans", system-ui, sans-serif;
+$headings-font-family:   "Newsreader", Georgia, serif;
+$font-size-root:         16px;
+
+/*-- scss:rules --*/
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;700&display=swap');
+
+body {
+  font-family: $font-family-sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: $headings-font-family;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: $inkt;
+}
+
+h1 { font-size: 2.4rem; line-height: 1.12; }
+h2 { font-size: 1.5rem; margin-top: 2.6rem; }
+
+p, li { max-width: 70ch; line-height: 1.6; }
+
+.lead {
+  font-family: $headings-font-family;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: $grijs;
+  max-width: 60ch;
+}
+
+/* Koersraster ------------------------------------------------------------ */
+
+.koersraster {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1px;
+  background: $lijn;
+  border-top: 1px solid $lijn;
+  border-left: 1px solid $lijn;
+  margin: 2rem 0 3rem;
+}
+
+.kaart {
+  background: $papier;
+  padding: 0.9rem 1rem 1rem;
+  border-right: 1px solid $lijn;
+  border-bottom: 1px solid $lijn;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.kaart .naam {
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.kaart .thema {
+  font-size: 0.72rem;
+  color: $zacht;
+}
+
+.kaart .cijfer {
+  font-size: 1.45rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.kaart .cijfer .eenheid {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: $grijs;
+  margin-left: 0.2rem;
+}
+
+.kaart .oordeel {
+  font-size: 0.78rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.s-gehaald  { background: $goed; }
+.s-koers    { background: $koers; }
+.s-traag    { background: $traag; }
+.s-mis      { background: $mis; }
+.s-geen     { background: $zacht; }
+
+.kaart img { width: 100%; height: auto; }
+
+/* Legenda ---------------------------------------------------------------- */
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  font-size: 0.82rem;
+  color: $grijs;
+  padding-bottom: 0.5rem;
+}
+.legenda span { display: flex; align-items: center; gap: 0.45rem; }
+
+/* Tabellen --------------------------------------------------------------- */
+
+table {
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  border-collapse: collapse;
+}
+th {
+  font-weight: 500;
+  color: $grijs;
+  border-bottom: 1px solid $inkt;
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+}
+td {
+  border-bottom: 1px solid $lijn;
+  padding: 0.4rem 0.6rem;
+}
+
+/* Bronvermelding --------------------------------------------------------- */
+
+.bronnoot {
+  font-size: 0.8rem;
+  color: $zacht;
+  border-top: 1px solid $lijn;
+  padding-top: 0.8rem;
+  margin-top: 3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+.s-onbekend { background: #B0B6BA; }
+
+/* Leeswijzer ------------------------------------------------------------- */
+
+.leeswijzer {
+  border-left: 2px solid $inkt;
+  padding: 0.2rem 0 0.2rem 1.6rem;
+  margin: 2.5rem 0 3rem;
+}
+
+.leeswijzer h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.leeswijzer h3 {
+  font-size: 1rem;
+  font-family: $font-family-sans-serif;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-top: 1.8rem;
+}
+
+.leeswijzer p {
+  font-size: 0.94rem;
+  color: $grijs;
+}
+
+.leeswijzer strong { color: $inkt; }

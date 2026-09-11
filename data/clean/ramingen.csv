@@ -1,0 +1,31 @@
+indicator;jaar;waarde;soort;bron;publicatie;gepubliceerd;opmerking
+EMU-saldo (% BBP);2026;-2,8;raming;CPB;cMEV 2027;2026-08-14;Mede door eenmalige overboeking defensiepensioenen
+EMU-saldo (% BBP);2027;-2,1;raming;CPB;cMEV 2027;2026-08-14;
+EMU-saldo (% BBP);2030;-2,2;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar van de periode 2027/2030
+EMU-saldo (% BBP);2034;-3,1;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar van de periode 2031/2034
+EMU-schuld (% BBP);2026;46,1;raming;CPB;cMEV 2027;2026-08-14;
+EMU-schuld (% BBP);2027;46,5;raming;CPB;cMEV 2027;2026-08-14;
+EMU-schuld (% BBP);2030;46,8;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar. MLT-basispad zag 2027 nog op 45,3
+EMU-schuld (% BBP);2034;52,5;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar
+Totale overheidsuitgaven als % BBP;2026;46,3;raming;CPB;cMEV 2027;2026-08-14;
+Totale overheidsuitgaven als % BBP;2027;46,3;raming;CPB;cMEV 2027;2026-08-14;
+Totale overheidsuitgaven als % BBP;2030;46,5;raming;CPB;MLT t/m 2034;2026-03-12;In de MLT-tabel "bruto collectieve uitgaven" genoemd - zelfde grootheid
+Totale overheidsuitgaven als % BBP;2034;47,7;raming;CPB;MLT t/m 2034;2026-03-12;Idem
+BBP reële groei;2026;1,4;raming;CPB;cMEV 2027;2026-08-14;
+BBP reële groei;2027;1,2;raming;CPB;cMEV 2027;2026-08-14;
+Werkloosheid (% werkzoekenden 15-75 jaar die direct beschikbaar zijn als percentage van beroepsbevolking);2026;3,9;raming;CPB;cMEV 2027;2026-08-14;
+Werkloosheid (% werkzoekenden 15-75 jaar die direct beschikbaar zijn als percentage van beroepsbevolking);2027;4,0;raming;CPB;cMEV 2027;2026-08-14;
+Werkloosheid (% werkzoekenden 15-75 jaar die direct beschikbaar zijn als percentage van beroepsbevolking);2030;4,3;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar
+Werkloosheid (% werkzoekenden 15-75 jaar die direct beschikbaar zijn als percentage van beroepsbevolking);2034;4,5;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar
+Kinderarmoede (% kinderen < 18);2026;2,4;raming;CPB;cMEV 2027;2026-08-14;Nieuwe CBS-SCP-Nibud-armoedegrens
+Kinderarmoede (% kinderen < 18);2027;2,3;raming;CPB;cMEV 2027;2026-08-14;Nieuwe CBS-SCP-Nibud-armoedegrens
+Kinderarmoede (% kinderen < 18);2030;2,2;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar
+Kinderarmoede (% kinderen < 18);2034;2,4;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar
+% personen onder NL-armoedegrens (nieuwe CBS–SCP–Nibud-methode);2026;2,6;raming;CPB;cMEV 2027;2026-08-14;
+% personen onder NL-armoedegrens (nieuwe CBS–SCP–Nibud-methode);2027;2,7;raming;CPB;cMEV 2027;2026-08-14;
+% personen onder NL-armoedegrens (nieuwe CBS–SCP–Nibud-methode);2030;2,6;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar
+% personen onder NL-armoedegrens (nieuwe CBS–SCP–Nibud-methode);2034;3,0;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar
+Armoede intensiteit (% inkomenstekort ten opzichte van de armoedegrens bij de mediaan binnen de groep in armoede);2026;21,0;raming;CPB;cMEV 2027;2026-08-14;
+Armoede intensiteit (% inkomenstekort ten opzichte van de armoedegrens bij de mediaan binnen de groep in armoede);2027;20,1;raming;CPB;cMEV 2027;2026-08-14;
+Armoede intensiteit (% inkomenstekort ten opzichte van de armoedegrens bij de mediaan binnen de groep in armoede);2030;19,5;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar
+Armoede intensiteit (% inkomenstekort ten opzichte van de armoedegrens bij de mediaan binnen de groep in armoede);2034;16,4;raming;CPB;MLT t/m 2034;2026-03-12;Niveau in eindjaar

@@ -1,0 +1,32 @@
+# R
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata
+
+# Data: ruwe downloads en tussenbestanden niet in Git
+data/interim/*
+
+# Brondata wel bewaren: dat is je versiehistorie
+!data/raw/bronblad_ruw_*.rds
+!data/raw/bronblad_ruw_*.csv
+
+# Gerenderde uitvoer WEL meenemen: GitHub Pages serveert docs/ rechtstreeks.
+# Wil je de site alleen via de Action laten bouwen, zet deze drie dan aan:
+# docs/dashboard.html
+# docs/dashboard_files/
+# docs/figuren/
+output/graphs/*
+output/tables/*
+
+# Logs
+logs/*.log
+
+# Systeem
+.DS_Store
+Thumbs.db
+~$*
+
+# Placeholders wel bewaren, zodat de mapstructuur in Git blijft
+!*/.gitkeep
+!**/.gitkeep

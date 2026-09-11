@@ -1,0 +1,333 @@
+---
+title: "Wat weten we eigenlijk over de doelen van het Rijk?"
+subtitle: "71 indicatoren uit Blik op Nederland, met de trend doorgetrokken waar dat kan"
+format:
+  html:
+    theme: [default, rekenkamer.scss]
+    toc: true
+    toc-title: "Thema's"
+    toc-location: left
+    page-layout: full
+    code-tools: false
+    # GitHub Pages serveert index.html bij een kale URL. Zonder deze regel
+    # levert https://.../Blik-op-Nederland/ een 404 op en werkt alleen
+    # https://.../Blik-op-Nederland/dashboard.html
+    output-file: index.html
+# Het device moet hier staan, niet in het setup-chunk: knitr opent het
+# grafische device voordat de code van het eerste chunk draait. Zonder
+# XQuartz heeft R op macOS geen cairo, en dan faalt het svg-device met
+# "libXrender.1.dylib not found". ragg heeft X11 niet nodig.
+knitr:
+  opts_chunk:
+    dev: ragg_png
+    dpi: 150
+execute:
+  echo: false
+  warning: false
+  message: false
+lang: nl
+---
+
+```{r setup}
+# Quarto rendert vanuit docs/ en knitr zet de werkmap na elk chunk terug.
+# 00_config.R zoekt de projectmap zelf op door omhoog te lopen tot het
+# Rekenkamer.Rproj vindt; daarna zijn alle paden absoluut en maakt de
+# werkmap niet meer uit.
+bron_config <- if (file.exists("R/00_config.R")) "R/00_config.R" else "../R/00_config.R"
+source(bron_config)
+source(file.path(projectmap, "R", "functies.R"))
+
+benodigd <- file.path(pad$interim, c("indicatoren_lang.rds", "samenvatting.rds"))
+if (!all(file.exists(benodigd))) {
+  stop("Tussenbestanden ontbreken in ", pad$interim, ".\n",
+       "Draai eerst run_all.R (of 01_inlezen.R en 02_indicatoren.R).\n",
+       "Staat er wel data maar op een andere plek? Dan draaide een eerder ",
+       "script met een andere projectmap: herstart R en draai run_all.R opnieuw.")
+}
+
+df  <- readRDS(benodigd[1])
+sam <- readRDS(benodigd[2])
+
+ram_pad  <- file.path(pad$interim, "ramingen.rds")
+ramingen <- if (file.exists(ram_pad)) readRDS(ram_pad) else NULL
+
+klasse <- c("Doel gehaald" = "s-gehaald", "Op koers" = "s-koers",
+            "Te traag" = "s-traag", "Verkeerde richting" = "s-mis",
+            "Alleen richting" = "s-geen", "Geen richting" = "s-onbekend",
+            "Te weinig data" = "s-onbekend")
+
+fig_dir <- file.path(pad$docs, "figuren")
+dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
+
+met_lijn <- function(d) {
+  n <- dplyr::count(d, indicator, name = "n_")
+  dplyr::semi_join(d, dplyr::filter(n, n_ >= 2), by = "indicator")
+}
+nl <- function(x, d = 1) format(round(x, d), big.mark = ".", decimal.mark = ",")
+```
+
+## Leeswijzer
+
+Deze pagina neemt de indicatoren van de Algemene Rekenkamer en beantwoordt er
+één vraag bij: **halen we het doel, of niet?**
+
+Het originele dashboard toont een lijn en een doel naast elkaar, maar laat het
+daarbij. Hier is de lijn doorgetrokken, op drie manieren:
+
+- waar de dataset van de Rekenkamer zelf te kort is, is de reeks verlengd met
+  cijfers van het **CBS**, die als de recentste cijfers gelden waar ze de
+  Rekenkamer-data overlappen;
+- waar het **CPB** een officiële raming publiceert, is die toegevoegd als
+  groene stippellijn — de kortetermijnraming (cMEV) voor de eerstkomende
+  jaren, de middellangetermijnverkenning (MLT) voor de jaren daarna;
+- waar geen van beide een cijfer geeft, is de trend van de laatste jaren
+  doorgerekend.
+
+**Wat de kleuren betekenen** staat in de legenda hieronder. Kort: groen is
+goed nieuws, geel is te langzaam, rood is de verkeerde kant op. Grijs
+betekent dat er geen doel bekend is om tegen af te zetten — dat geldt voor
+meer dan de helft van de indicatoren, en dat is zelf al een uitkomst.
+
+**Onder elke grafiek** staat in één zin wat er aan de hand is: of het doel
+gehaald wordt, en zo niet, hoe snel de indicator beweegt.
+
+```{r opening, results="asis"}
+n_tot   <- nrow(sam)
+n_getal <- sum(sam$heeft_streefwaarde)
+n_richt <- sum(!is.na(sam$richting)) - n_getal
+n_niets <- sum(is.na(sam$richting))
+n_coal  <- sum(!is.na(sam$coalitiedoel))
+
+cat(glue::glue(
+  '<p class="lead">Van de {n_tot} indicatoren heeft er {n_getal} een streefwaarde ',
+  'waaraan je kunt aflezen of het doel gehaald wordt. Bij {n_richt} staat alleen ',
+  'welke kant het op moet, en bij {n_niets} staat ook dat niet. ',
+  'Voor {n_coal} indicatoren heeft de coalitie zich aan een eigen doel verbonden.</p>'
+))
+```
+
+Dat is op zichzelf de eerste uitkomst. Voortgang meten kan alleen waar een doel becijferd is; voor de rest blijft het bij de vraag of een indicator de gewenste kant op beweegt. Hieronder staat eerst de kleine groep waar een echt oordeel mogelijk is, daarna de rest.
+
+<div class="legenda">
+<span><i class="stip s-gehaald"></i>Doel gehaald</span>
+<span><i class="stip s-koers"></i>Op koers</span>
+<span><i class="stip s-traag"></i>Te traag</span>
+<span><i class="stip s-mis"></i>Verkeerde richting</span>
+<span><i class="stip s-geen"></i>Alleen een richting bekend</span>
+<span><i class="stip s-onbekend"></i>Geen richting bekend</span>
+</div>
+
+De onderbroken lijn in een grafiek is de streefwaarde. Waar een tweede,
+lichtere stippellijn staat, geldt naast de gehanteerde norm nog een ander doel
+&mdash; bij R&amp;D-uitgaven bijvoorbeeld de EU-doelstelling van 3% naast het
+Nederlandse doel van 2,5%.
+
+## Indicatoren met een becijferd doel
+
+```{r raster, results="asis"}
+maak_spark <- function(rij) {
+  reeks <- dplyr::filter(df, indicator == rij$indicator, jaar >= instel$plot_vanaf)
+  trend <- bereken_trend(reeks$jaar, reeks$waarde)
+  kleur <- unname(status_kleur[as.character(rij$status)])
+  p <- sparkline(reeks, doel = rij$doel, doeljaar = rij$doeljaar,
+                 doel_alt = rij$doel_alt, trend = trend, kleur = kleur)
+  slug <- janitor::make_clean_names(rij$indicator)
+  bewaar_fig(p, slug, map = fig_dir, breedte = 2.4, hoogte = 0.85,
+             ook_png = FALSE)
+  file.path("figuren", paste0(slug, ".svg"))
+}
+
+kaart <- function(rij) {
+  svg <- maak_spark(rij)
+  # Namen met aanhalingstekens (bv. "Rule of Law"-index) breken anders de
+  # HTML-attributen in alt= en src=.
+  naam_veilig <- gsub('"', "&quot;", rij$indicator)
+  beweging_tekst <- beschrijf_helling(rij$helling, rij$laatste_waarde,
+                                      rij$eenheid)
+  oordeel <- dplyr::case_when(
+    rij$status == "Te traag" & !is.na(beweging_tekst) ~
+      paste0("Te traag — ", beweging_tekst),
+    rij$status == "Te traag" ~ "Te traag voor het doel",
+    rij$status == "Verkeerde richting" ~ "Beweegt van het doel af",
+    rij$status == "Op koers"     ~ paste0("Op koers voor ", rij$doeljaar),
+    rij$status == "Doel gehaald" ~ "Voldoet aan de norm",
+    !is.na(rij$doel_alt) ~ paste0(as.character(rij$status), " (tweede doel: ",
+                                  nl(rij$doel_alt), ")"),
+    !is.na(rij$beweging)         ~ rij$beweging,
+    TRUE ~ as.character(rij$status)
+  )
+  cat(glue::glue(
+    '<div class="kaart">',
+    '<div class="thema">{rij$thema}{ifelse(isTRUE(rij$herkomst == "CBS"), " · CBS-reeks", "")}{ifelse(isTRUE(rij$heeft_raming), " · CPB-raming", "")}</div>',
+    '<div class="naam">{naam_veilig}</div>',
+    '<div class="cijfer">{nl(rij$laatste_waarde)}',
+    '<span class="eenheid">{ifelse(is.na(rij$eenheid), "", rij$eenheid)}</span></div>',
+    '<img src="{svg}" alt="Verloop van {naam_veilig}">',
+    '<div class="oordeel"><i class="stip {klasse[as.character(rij$status)]}"></i>{oordeel}</div>',
+    '</div>'
+  ))
+}
+
+met_doel <- dplyr::filter(sam, heeft_streefwaarde) |> dplyr::arrange(status, thema)
+cat('<div class="koersraster">')
+for (i in seq_len(nrow(met_doel))) kaart(met_doel[i, ])
+cat('</div>')
+```
+
+## Indicatoren zonder becijferd doel
+
+Hier valt geen voortgang te meten, alleen beweging. De onderbroken doellijn ontbreekt dan ook.
+
+```{r raster2, results="asis"}
+zonder <- dplyr::filter(sam, !heeft_streefwaarde) |> dplyr::arrange(thema, indicator)
+cat('<div class="koersraster">')
+for (i in seq_len(nrow(zonder))) kaart(zonder[i, ])
+cat('</div>')
+```
+
+## Waar het misgaat
+
+```{r knelpunten}
+knel <- sam |>
+  dplyr::filter(status %in% c("Te traag", "Verkeerde richting") |
+                beweging == "Verkeerde kant op") |>
+  dplyr::arrange(status, thema)
+
+if (nrow(knel) == 0) {
+  cat("Geen indicatoren in deze categorie.")
+} else {
+  knel |>
+    dplyr::transmute(
+      Thema = thema, Indicator = indicator,
+      Nu = round(laatste_waarde, 1),
+      Streefwaarde = round(doel, 1),
+      `Verwacht in doeljaar` = round(projectie, 1),
+      `Per jaar` = round(helling, 3),
+      Status = as.character(status)
+    ) |>
+    knitr::kable()
+}
+```
+
+## Hoe hard zijn de doelen?
+
+De Rekenkamer noteert per indicator waar het doel op berust: een wet, een verdrag, een Europese afspraak of alleen beleid. Dat onderscheid bepaalt hoeveel gewicht een gemiste norm heeft.
+
+```{r hardheid}
+sam |>
+  dplyr::count(doelsoort, heeft_streefwaarde) |>
+  tidyr::pivot_wider(names_from = heeft_streefwaarde, values_from = n,
+                     values_fill = 0) |>
+  dplyr::rename(Grondslag = doelsoort,
+                `Zonder streefwaarde` = `FALSE`,
+                `Met streefwaarde` = `TRUE`) |>
+  knitr::kable()
+```
+
+```{r themas, results="asis"}
+for (th in sort(unique(sam$thema))) {
+
+  cat(glue::glue("\n\n## {th}\n\n"))
+
+  deel    <- dplyr::filter(sam, thema == th) |>
+    dplyr::mutate(facetlabel = stringr::str_wrap(
+      ifelse(herkomst == "CBS", paste0(indicator, "  [CBS]"), indicator), 42))
+  reeksen <- dplyr::filter(df, thema == th, jaar >= instel$plot_vanaf) |>
+    dplyr::mutate(facetlabel = stringr::str_wrap(
+      ifelse(herkomst == "CBS", paste0(indicator, "  [CBS]"), indicator), 42))
+
+  # Ramingen voor dit thema, met de laatste meting eraan geplakt zodat de
+  # lijn aansluit in plaats van los in de lucht te hangen.
+  ram_thema <- if (is.null(ramingen)) {
+    reeksen[0, c("indicator", "jaar", "waarde", "facetlabel")]
+  } else {
+    aansluit <- reeksen |>
+      dplyr::group_by(indicator, facetlabel) |>
+      dplyr::slice_max(jaar, n = 1) |>
+      dplyr::ungroup() |>
+      dplyr::select(indicator, jaar, waarde, facetlabel)
+
+    dplyr::inner_join(ramingen, dplyr::distinct(reeksen, indicator, facetlabel),
+                      by = "indicator") |>
+      dplyr::select(indicator, jaar, waarde, facetlabel) |>
+      dplyr::bind_rows(dplyr::semi_join(aansluit, ramingen, by = "indicator")) |>
+      dplyr::arrange(indicator, jaar)
+  }
+
+  p <- ggplot2::ggplot(reeksen, ggplot2::aes(jaar, waarde)) +
+    ggplot2::geom_hline(data = dplyr::filter(deel, !is.na(doel)),
+                        ggplot2::aes(yintercept = doel),
+                        colour = "#8A9199", linetype = "22", linewidth = 0.45) +
+    ggplot2::geom_hline(data = dplyr::filter(deel, !is.na(doel_alt)),
+                        ggplot2::aes(yintercept = doel_alt),
+                        colour = "#B0B6BA", linetype = "12", linewidth = 0.4) +
+    ggplot2::geom_line(data = met_lijn(reeksen),
+                       colour = "#12263A", linewidth = 0.8) +
+    ggplot2::geom_point(colour = "#12263A", size = 1.2) +
+    # Gedeelde x-as kan weer, omdat alle reeksen op instel$plot_vanaf beginnen
+    ggplot2::facet_wrap(~ facetlabel, scales = "free_y", ncol = 3) +
+    ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(4)) +
+    thema_rk() +
+    ggplot2::theme(strip.text = ggplot2::element_text(
+      hjust = 0, size = 8.5, colour = "#12263A"))
+
+  slug <- paste0("thema_", janitor::make_clean_names(th))
+  hoogte <- max(2.8, 2.4 * ceiling(nrow(deel) / 3))
+  bewaar_fig(p, slug, map = fig_dir, breedte = 9.5, hoogte = hoogte,
+             ook_png = FALSE)
+
+  cat(glue::glue('<img src="figuren/{slug}.svg" alt="Indicatoren voor {th}" style="width:100%">\n\n'))
+
+  regels <- deel |>
+    dplyr::rowwise() |>
+    dplyr::mutate(tekst = dplyr::case_when(
+      status == "Doel gehaald" ~ glue::glue("**{indicator}** voldoet aan de norm."),
+      status == "Op koers"     ~ glue::glue("**{indicator}** ligt op koers voor {doeljaar}."),
+      status == "Te traag" & !is.na(doel_alt) ~
+        glue::glue("**{indicator}** {beschrijf_helling(helling, laatste_waarde, eenheid)}; te langzaam voor de norm van {doel}. Naast die norm geldt {doel_alt_label}."),
+      status == "Te traag" ~
+        glue::glue("**{indicator}** beweegt de goede kant op maar {beschrijf_helling(helling, laatste_waarde, eenheid)}, te langzaam voor de streefwaarde."),
+      status == "Verkeerde richting" & !is.na(doel_alt) ~
+        glue::glue("**{indicator}** beweegt van het doel af. Naast de gehanteerde norm van {doel} geldt {doel_alt_label}."),
+      status == "Verkeerde richting" ~ glue::glue("**{indicator}** beweegt van het doel af."),
+      !is.na(beweging) ~ glue::glue("**{indicator}** heeft geen streefwaarde; de reeks beweegt de {tolower(beweging)}."),
+      TRUE ~ glue::glue("**{indicator}**: de bron legt geen gewenste richting vast.")
+    )) |>
+    dplyr::ungroup() |>
+    dplyr::pull(tekst)
+
+  cat(paste0("- ", regels, collapse = "\n"), "\n\n")
+}
+```
+
+## Alle indicatoren
+
+```{r tabel}
+sam |>
+  dplyr::transmute(
+    Thema = thema, Indicator = indicator,
+    Periode = paste0(eerste_jaar, "–", laatste_jaar),
+    N = n_metingen,
+    Laatste = round(laatste_waarde, 2),
+    Eenheid = eenheid,
+    # doel_tekst is meestal gewone tekst uit de bron ("Minimaal 95%",
+    # "Maximum 2026: 18.000") en die laten we ongemoeid. Alleen bij een paar
+    # indicatoren is de brontekst zelf een kaal getal (bv. "0.007"), en door
+    # een drijvendekommaonnauwkeurigheid schrijft R dat soms weg als
+    # wetenschappelijke notatie ("7.0000000000000001E-3"). Dat repareren we
+    # gericht: alleen als er een E-notatie in staat, niet de hele tekst.
+    `Doel volgens bron` = dplyr::if_else(
+      grepl("[0-9][eE][-+]?[0-9]+", doel_tekst),
+      format(as.numeric(doel_tekst), scientific = FALSE, trim = TRUE) |>
+        gsub("\\.", ",", x = _),
+      doel_tekst
+    ),
+    Status = as.character(status),
+    Bron = bron, Reeks = herkomst
+  ) |>
+  knitr::kable()
+```
+
+::: {.bronnoot}
+Cijfers uit de dataset *Blik op Nederland: Dashboard Doelen en Resultaten* van de Algemene Rekenkamer, beschikbaar onder CC0 1.0 Universal. De bron bevat metingen voor 2012, 2018 en 2020 tot en met 2025; de mediane indicator heeft vijf metingen. Voor enkele indicatoren is de reeks verlengd met CBS StatLine; die zijn gemarkeerd met "CBS-reeks" en lopen verder terug. Waar beide bronnen een jaar bevatten, is het CBS-cijfer aangehouden, omdat CBS herzieningen doorvoert die de Rekenkamer-publicatie nog niet bevat. Trends zijn lineaire schattingen over de laatste tien jaar en zijn een doorrekening van het verleden, geen prognose. Er wordt bewust geen jaartal genoemd waarop een doel bereikt zou worden: bij een vrijwel vlakke reeks levert die berekening een willekeurig ver jaartal op. In plaats daarvan staat de verandering per jaar vermeld. Ramingen komen uit de concept-Macro Economische Verkenning 2027 van het CPB (14 augustus 2026) en zijn als groene stippellijn weergegeven; een raming is beleidsafhankelijk en wordt periodiek bijgesteld. De streefwaarden zijn afgeleid uit de vrije tekst van de bron en waar nodig handmatig aangevuld; die interpretatie is van de makers van deze pagina, niet van de Algemene Rekenkamer.
+:::
